@@ -1,4 +1,5 @@
 import ChatWindow from "@/components/ChatWindow";
+import OtherAudio from "@/components/OtherAudio";
 
 export default function Home() {
   return (
@@ -9,6 +10,7 @@ export default function Home() {
 
       <div className="mb-32 grid text-center ">
         <ChatWindow />
+        <OtherAudio />
       </div>
     </main>
   );
