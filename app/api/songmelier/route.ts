@@ -25,7 +25,7 @@ const convertVercelMessageToLangChainMessage = (message: VercelChatMessage) => {
   }
 };
 
-const PREFIX_TEMPLATE = `You are an expert on music and bands. You are talking to a person who is a music fan. Respond to their questions about music and bands in a very concise, but friendly manner. Take note of if the person asks to make a playlist and suggest a name of the playlist.\n\n`;
+const PREFIX_TEMPLATE = `You are an expert on music and bands. You are talking to a person who is a music fan. Respond to their questions in a very concise, but friendly manner. Take note of if the person asks to make a playlist and suggest a name of the playlist.\n\n`;
 
 export async function POST(req: NextRequest) {
   try {
