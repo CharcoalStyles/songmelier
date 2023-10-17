@@ -27,6 +27,35 @@ const convertVercelMessageToLangChainMessage = (message: VercelChatMessage) => {
 
 const PREFIX_TEMPLATE = `You are an expert on music and bands. You are talking to a person who is a music fan. Respond to their questions in a very concise, but friendly manner. Take note of if the person asks to make a playlist and suggest a name of the playlist.\n\n`;
 
+export const schema = z.object({
+  chat_response: z.string().describe("A response to the human's input"),
+  // bands_response: z
+  //   .optional(z.array(z.string()))
+  //   .describe("A list of bands from the response"),
+  // songs_response: z
+  //   .optional(z.array(z.string()))
+  //   .describe("A list of songs from the response"),
+  create_playlist: z
+    .optional(z.boolean())
+    .describe("Whether to create a playlist from the input"),
+  playlist_name: z
+    .optional(z.string())
+    .describe("The name of the playlist to create"),
+  playlist: z
+    .optional(
+      z.array(
+        z.object({
+          band: z.string(),
+          song: z.string(),
+        })
+      )
+    )
+    .describe("The list of bands and songs in the playlist"),
+  play_now: z
+    .optional(z.boolean())
+    .describe("Whether the input asked to play songs immediately"),
+});
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -46,31 +75,11 @@ export async function POST(req: NextRequest) {
 
     const tools = [new Calculator(), new WikipediaQueryRun()];
     const chat = new ChatOpenAI({
-      modelName: /*"gpt-4"*/ "gpt-3.5-turbo",
+      modelName: /*"gpt-4"*/ "gpt-3.5-turbo-16k",
       temperature: 0.8,
     });
 
-    const schema = z.object({
-      chat_response: z.string().describe("A response to the human's input"),
-      // bands_response: z
-      //   .optional(z.array(z.string()))
-      //   .describe("A list of bands from the response"),
-      // songs_response: z
-      //   .optional(z.array(z.string()))
-      //   .describe("A list of songs from the response"),
-      create_playlist: z
-        .optional(z.boolean())
-        .describe("Whether to create a playlist from the input"),
-      playlist_name: z
-        .optional(z.string())
-        .describe("The name of the playlist to create"),
-      playlist: z
-        .optional(z.array(z.string()))
-        .describe("The list of bands and songs in the playlist"),
-      play_now: z
-        .optional(z.boolean())
-        .describe("Whether the input asked to play songs immediately"),
-    });
+
     /**
      * The default prompt for the OpenAI functions agent has a placeholder
      * where chat messages get injected - that's why we set "memoryKey" to

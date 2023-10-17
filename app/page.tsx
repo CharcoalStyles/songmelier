@@ -59,7 +59,7 @@ export default function Home() {
         <p className="text-4xl font-bold">Songmelier</p>
       </div>
       <div className="mb-32 grid text-center ">
-        <ChatWindow />
+        <ChatWindow spotifyApi={spotifyApi}/>
         <OtherAudio />
         <SpotifyLogin spotifyApi={spotifyApi} />
       </div>
